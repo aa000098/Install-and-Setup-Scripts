@@ -49,7 +49,7 @@ ${RUN} apt install -y python3-rknnlite2 || {
   echo "[WARN] Failed to install python3-rknnlite2 via apt."
   echo "       Please check your Radxa OS version and package repository."
 }
-  
+   
 echo
 echo ">>> 3) Installing rknpu2 driver package for RK3588 (if available)..."
 # Official Radxa image usually already has rknpu2 installed, but this is safe:
