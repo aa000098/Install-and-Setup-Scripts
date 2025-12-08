@@ -1,18 +1,16 @@
 #!/usr/bin/env bash
 # set -euo pipefail
 
-echo "== Linux용 OpenCL + llama.cpp(OpenCL backend) 설치 스크립트 =="
+echo "== Linux용 OpenCL 설치 스크립트 =="
 
-# ===== 0. 설정값 =====
-LLAMA_ROOT="${HOME}/install_files/llama.cpp"   # llama.cpp를 둘 경로 (원하면 바꿔도 됨)
 
 # ===== 1. 패키지 설치 =====
 echo "[1/4] OpenCL 및 빌드 도구 패키지 설치 (sudo 필요)"
 
-# sudo apt-get update
-# sudo apt-get install -y \
-#     git cmake ninja-build build-essential \
-#     ocl-icd-opencl-dev clinfo
+sudo apt-get update
+sudo apt-get install -y \
+    git cmake ninja-build build-essential \
+    ocl-icd-opencl-dev clinfo
 echo "  - Packages needed: git cmake ninja-build build-essential ocl-icd-opencl-dev clinfo"
 
 
