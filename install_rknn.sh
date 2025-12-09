@@ -128,3 +128,11 @@ echo " - Use python3 on this board to run examples from the Model Zoo."
 echo " - On your x86_64 PC, install RKNN-Toolkit2 to convert ONNX/TF models to .rknn."
 echo "======================================================"
 
+echo
+echo "[주의]"
+echo "RKNN 예제는 sudo 권한을 가진 유저가 rknn_toolkit_lite2가 설치된 같은 Python(예: venv)을 써야 합니다."
+echo
+echo "    sudo \"\$(which python)\" test.py"
+echo
+echo "위 명령어를 통해  활성화된 venv의 python 바이너리를 그대로 root 권한으로 실행하게 됩니다."
+echo
