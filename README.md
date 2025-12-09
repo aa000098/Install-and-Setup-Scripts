@@ -8,7 +8,7 @@
 │   ├── llama.cpp  
 │   ├── opencv  
 │   └── rknn-toolkit2  
-├── local          
+├── local  
 │   ├── venv    # python virtual env  
 │   └── shell_scripts  
 └── README.md  
