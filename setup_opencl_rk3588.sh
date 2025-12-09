@@ -1,22 +1,23 @@
 #!/usr/bin/env bash
 #
-# switch_to_mali_opencl_rk3588.sh
+# setup_opencl_rk3588.sh
 #
 # ROCK 5B/5B+ (RK3588)에서 기본 Panthor → Mali(OpenCL 가능)로 전환하는 스크립트.
 # Radxa 공식 문서 "Switch GPU driver" 절차를 기반으로 함:
 #   https://docs.radxa.com/en/rock5/rock5c/radxa-os/mali-gpu
 #
 # 사용 방법:
-#   chmod +x switch_to_mali_opencl_rk3588.sh
-#   sudo ./switch_to_mali_opencl_rk3588.sh
+#   chmod +x setup_opencl_rk3588.sh
+#   sudo ./setup_opencl_rk3588.sh
 #
 # 스크립트가 해주는 것:
-#   1) /etc/apt/preferences.d/mali 작성 (Rockchip xserver 핀)
-#   2) (있다면) 옛날 libmali g13p0 deb 제거
+#   1) 기본 정보 출력
+#   2) /etc/apt/preferences.d/mali 작성 (Rockchip xserver 핀)
 #   3) libmali-valhall-g610-g24p0-x11-wayland-gbm 설치 (RK3588용)
 #   4) /etc/modprobe.d/panfrost.conf 수정 → panfrost 블랙리스트, mali는 enable
 #   5) LIBGL_KOPPER_DISABLE=true 를 /etc/environment에 추가(Zink off)
-#   6) 마지막에 rsetup 로 해야 할 수동 작업 안내 + reboot 안내
+#   6) sudo 실행한 일반 유저를 video/render 그룹에 추가 (GPU 접근용)
+#   7) 마지막에 rsetup 로 해야 할 수동 작업 안내 + reboot 안내
 
 set -euo pipefail
 
@@ -214,7 +215,51 @@ else
 fi
 
 #-------------------------------------------------------
-# 6. 요약 및 이후 수동 단계 안내
+# 6. GPU 디바이스 접근을 위해 일반 사용자 video/render 그룹 추가
+#   - sudo 로 실행한 경우 SUDO_USER 를 기준으로 함
+#   - /dev/dri/renderD* / /dev/mali* 가 대개 root:video, root:render 이므로
+#     해당 그룹에 유저를 추가해 두면 sudo 없이도 OpenCL 사용 가능
+#-------------------------------------------------------
+echo "=== 일반 유저를 video/render 그룹에 추가 (GPU 디바이스 권한) ==="
+
+TARGET_USER="${SUDO_USER:-}"
+
+if [[ -z "${TARGET_USER}" || "${TARGET_USER}" == "root" ]]; then
+    echo "[!] SUDO_USER 정보를 찾을 수 없어 비 root 계정을 자동으로 추가할 수 없습니다."
+    echo "    필요하다면 다음 명령으로 수동으로 추가해 주세요 (예: hyunho.son):"
+    echo "      sudo usermod -aG video,render <username>"
+else
+    echo "[i] sudo 를 실행한 사용자: ${TARGET_USER}"
+
+    # video 그룹이 있으면 추가
+    if getent group video >/dev/null 2>&1; then
+        if id -nG "${TARGET_USER}" | grep -qw "video"; then
+            echo "[i] ${TARGET_USER} 는 이미 video 그룹에 속해 있습니다."
+        else
+            usermod -aG video "${TARGET_USER}"
+            echo "[i] ${TARGET_USER} 를 video 그룹에 추가했습니다."
+        fi
+    else
+        echo "[!] 'video' 그룹이 존재하지 않습니다. /dev 권한 구조를 확인해 주세요."
+    fi
+
+    # render 그룹이 있으면 같이 추가
+    if getent group render >/dev/null 2>&1; then
+        if id -nG "${TARGET_USER}" | grep -qw "render"; then
+            echo "[i] ${TARGET_USER} 는 이미 render 그룹에 속해 있습니다."
+        else
+            usermod -aG render "${TARGET_USER}"
+            echo "[i] ${TARGET_USER} 를 render 그룹에 추가했습니다."
+        fi
+    else
+        echo "[i] 'render' 그룹은 없는 것으로 보입니다. (문제 없을 수 있음)"
+    fi
+
+    echo "[i] 그룹 변경 사항은 ${TARGET_USER} 가 로그아웃 후 다시 로그인해야 적용됩니다."
+fi
+
+#-------------------------------------------------------
+# 7. 요약 및 이후 수동 단계 안내
 #-------------------------------------------------------
 echo
 echo "=== 작업 요약 ==="
@@ -239,5 +284,5 @@ echo "  clinfo | grep -E 'Platform Name|Device Name|OpenCL'"
 echo
 echo "Mali(OpenCL) 모드로 전환이 완료되면, ARM Platform / Mali GPU 디바이스가 clinfo 에 나타날 것입니다."
 echo
-echo "=== 스크립트 완료: switch_to_mali_opencl_rk3588.sh ==="
+echo "=== 스크립트 완료: setup_opencl_rk3588.sh ==="
 
