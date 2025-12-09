@@ -21,6 +21,7 @@ PKGS=(
   libgtk-3-dev
 
   # For vim
+  vim-gtk3
   ncurses-dev
   libacl1-dev
   gawk
