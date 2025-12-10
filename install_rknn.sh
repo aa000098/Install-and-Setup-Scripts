@@ -68,7 +68,7 @@ WHEEL_FILE=$(ls ${TOOLKIT_LITE_PACKAGE_DIR}/rknn_toolkit_lite2-${VERSION_NUM}-${
 REQ_FILE="${TOOLKIT_PKG_DIR}/${ARCH}_requirements_${PYTAG}.txt"
 
 echo
-echo ">>> Installing rknn_toolkit2 + requirements..."
+echo ">>> Installing rknn-toolkit-lite2 + requirements..."
 
 if [ -n "${WHEEL_FILE}" ]; then
   echo "    Found wheel: ${WHEEL_FILE}"
@@ -115,6 +115,26 @@ else
 fi
 
 echo
+echo ">>> RKLLM (rknn-llm) runtime repo for LLM on NPU..."
+
+RKLLM_BRANCH="release-v1.2.1b1"
+RKLLM_DIR="${PROJECT_DIR}/rknn-llm"
+
+if [ -d "${RKLLM_DIR}" ]; then
+  echo "    Found existing rknn-llm repo at: ${RKLLM_DIR}"
+  # 원하면 최신 상태만 살짝 확인
+  (cd "${RKLLM_DIR}" && git rev-parse --abbrev-ref HEAD && git log -1 --oneline || true)
+else
+  echo "    Cloning rknn-llm (branch ${RKLLM_BRANCH}) into ${RKLLM_DIR} ..."
+  git clone -b "${RKLLM_BRANCH}" https://github.com/airockchip/rknn-llm.git "${RKLLM_DIR}" || {
+    echo "[WARN] Failed to clone rknn-llm."
+    echo "       You can clone it manually later with:"
+    echo "         git clone -b ${RKLLM_BRANCH} https://github.com/airockchip/rknn-llm.git \"${RKLLM_DIR}\""
+  }
+fi
+
+
+echo
 echo "======================================================"
 echo " RKNN setup finished."
 echo
@@ -122,17 +142,26 @@ echo " - python3-rknnlite2 installed (or attempted)."
 echo " - rknpu2-rk3588 installed (or attempted)."
 echo " - dmesg checked for 'Initialized rknpu'."
 echo " - RKNN Model Zoo cloned to: ${PROJECT_DIR}/rknn_model_zoo (if clone succeeded)."
+echo " - RKLLM runtime repo cloned to: ${PROJECT_DIR}/rknn-llm (if clone succeeded)."
 echo
 echo "Next steps:"
 echo " - Use python3 on this board to run examples from the Model Zoo."
+echo " - Use rknn-llm examples on this board to run .rkllm LLM models on NPU."
 echo " - On your x86_64 PC, install RKNN-Toolkit2 to convert ONNX/TF models to .rknn."
 echo "======================================================"
 
 echo
 echo "[주의]"
+echo "RKNPU 디바이스는 기본적으로 root 또는 video 그룹에 속한 사용자만 접근할 수 있습니다."
 echo "RKNN 예제는 sudo 권한을 가진 유저가 rknn_toolkit_lite2가 설치된 같은 Python(예: venv)을 써야 합니다."
 echo
-echo "    sudo \"\$(which python)\" test.py"
+echo "1) [권장] 현재 사용자를 video 그룹에 추가해서 sudo 없이 실행:"
+echo "   sudo usermod -aG video \$USER"
+echo "   # 로그아웃 후 다시 로그인해야 반영됩니다."
+echo "   python test.py"
 echo
-echo "위 명령어를 통해  활성화된 venv의 python 바이너리를 그대로 root 권한으로 실행하게 됩니다."
+echo "2) video 그룹에 추가하지 않고 일시적으로 root 권한으로 실행:"
+echo "   sudo \"\$(which python)\" test.py"
+echo
+echo "위 두 방법 중 하나를 사용해 활성화된 venv의 python 바이너리로 test.py를 실행하세요."
 echo
