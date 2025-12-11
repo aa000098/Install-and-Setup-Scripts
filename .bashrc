@@ -211,3 +211,7 @@ qnn() {
     tensorflowLocation=$(python -m pip show tensorflow | grep '^Location: ' | awk '{print $2}')
     export TENSORFLOW_HOME="$tensorflowLocation/tensorflow"
 }
+
+#RKNN
+export GCC_COMPILER="/usr/bin/aarch64-linux-gnu"
+
