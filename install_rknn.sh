@@ -43,7 +43,7 @@ else
 fi
 
 echo
-echo ">>> Installing rknn_toolkit_lite2 wheel (if present in ${PROJECT_DIR})..."
+echo ">>> Installing rknn-toolkit-lite2 / rknn-toolkit2 + requirements..."
 
 # wheel 파일 이름이 정확히 아래처럼 있다고 가정
 #  (cp3X 부분은 실제 환경에 맞게 cp310, cp311 등으로 되어 있을 것)
@@ -62,28 +62,46 @@ else
 fi
 
 TOOLKIT_LITE_PACKAGE_DIR="${PROJECT_DIR}/rknn-toolkit2/rknn-toolkit-lite2/packages"
-TOOLKIT_PKG_DIR="${PROJECT_DIR}/rknn-toolkit2/rknn-toolkit2/packages/${ARCH}"
+TOOLKIT_PACKAGE_DIR="${PROJECT_DIR}/rknn-toolkit2/rknn-toolkit2/packages/${ARCH}"
 
-WHEEL_FILE=$(ls ${TOOLKIT_LITE_PACKAGE_DIR}/rknn_toolkit_lite2-${VERSION_NUM}-${PYTAG}-${PYTAG}-manylinux_2_17_aarch64.manylinux2014_aarch64.whl 2>/dev/null | head -n 1 || true)
-REQ_FILE="${TOOLKIT_PKG_DIR}/${ARCH}_requirements_${PYTAG}.txt"
+RKNN_LITE_WHEEL_FILE=$(ls ${TOOLKIT_LITE_PACKAGE_DIR}/rknn_toolkit_lite2-${VERSION_NUM}-${PYTAG}-${PYTAG}-manylinux_2_17_aarch64.manylinux2014_aarch64.whl 2>/dev/null | head -n 1 || true)
+RKNN_WHEEL_FILE=$(ls ${TOOLKIT_PACKAGE_DIR}/rknn_toolkit2-${VERSION_NUM}-${PYTAG}-${PYTAG}-manylinux_2_17_aarch64.manylinux2014_aarch64.whl 2>/dev/null | head -n 1 || true)
+REQ_FILE="${TOOLKIT_PACKAGE_DIR}/${ARCH}_requirements_${PYTAG}.txt"
 
-echo
-echo ">>> Installing rknn-toolkit-lite2 + requirements..."
-
-if [ -n "${WHEEL_FILE}" ]; then
-  echo "    Found wheel: ${WHEEL_FILE}"
+# 1) rknn_toolkit_lite2 wheel 설치
+if [ -n "${RKNN_LITE_WHEEL_FILE}" ]; then
+  echo "    Found lite2 wheel: ${RKNN_LITE_WHEEL_FILE}"
   if command -v pip3 >/dev/null 2>&1; then
-    pip3 install "${WHEEL_FILE}" || {
-      echo "[WARN] pip3 install ${WHEEL_FILE} failed."
+    pip3 install "${RKNN_LITE_WHEEL_FILE}" || {
+      echo "[WARN] pip3 install ${RKNN_LITE_WHEEL_FILE} failed."
     }
   else
-    echo "[WARN] Neither pip3 nor python3 found. Cannot install RKNN Toolkit Lite2 wheel."
+    echo "[WARN] pip3 not found. Cannot install RKNN Toolkit Lite2 wheel."
   fi
 else
-  echo "    No wheel matching pattern '${WHEEL_FILE}' found in ${TOOLKIT_LITE_PACKAGE_DIR}."
-  echo "    Put your rknn_toolkit_lite2-2.3.0-...aarch64.whl here and re-run if needed."
+  echo "    No rknn_toolkit_lite2 wheel found in:"
+  echo "        ${TOOLKIT_LITE_PACKAGE_DIR}"
+  echo "    Put your rknn_toolkit_lite2-${VERSION_NUM}-${PYTAG}-${PYTAG}-manylinux_2_17_aarch64.manylinux2014_aarch64.whl here and re-run if needed."
 fi
 
+# 2) rknn_toolkit2 wheel 설치
+if [ -n "${RKNN_WHEEL_FILE}" ]; then
+  echo "    Found toolkit2 wheel: ${RKNN_WHEEL_FILE}"
+  if command -v pip3 >/dev/null 2>&1; then
+    pip3 install "${RKNN_WHEEL_FILE}" || {
+      echo "[WARN] pip3 install ${RKNN_WHEEL_FILE} failed."
+    }
+  else
+    echo "[WARN] pip3 not found. Cannot install RKNN Toolkit2 wheel."
+  fi
+else
+  echo "    No rknn_toolkit2 wheel found in:"
+  echo "        ${TOOLKIT_PACKAGE_DIR}"
+  echo "    Expecting something like:"
+  echo "        rknn_toolkit2-${VERSION_NUM}-${PYTAG}-${PYTAG}-manylinux_2_17_aarch64.manylinux2014_aarch64.whl"
+fi
+
+# 3) requirements 설치
 if [ -f "${REQ_FILE}" ]; then
   echo "    Installing toolkit2 dependencies from: ${REQ_FILE}"
   python3 -m pip install -r "${REQ_FILE}" || {
@@ -95,14 +113,25 @@ else
 fi
 
 echo
-echo ">>> Verifying rknn-lite2 Python import..."
-TEST_PY="${PROJECT_DIR}/rknn_model_zoo/test_rknn_lite2_import.py"
+echo ">>> Verifying rknn-lite2 / rknn-toolkit2 Python import..."
+TEST_PY="${PROJECT_DIR}/rknn_model_zoo/test_rknn_imports.py"
 cat > "${TEST_PY}" << 'EOF'
+ok = True
 try:
-    from rknnlite.api import RKNNLite as RKNN
+    from rknnlite.api import RKNNLite as RKNNLite
     print("[OK] rknn-lite2 import succeeded.")
 except Exception as e:
     print("[ERROR] Failed to import rknnlite.api.RKNNLite:", e)
+    ok = False
+
+try:
+    from rknn.api import RKNN
+    print("[OK] rnnk-toolkit2 import succeeded.")
+except Exception as e:
+    print("[ERROR] Failed to import rknn.api.RKNN:", e)
+    ok = False
+
+if not ok:
     raise SystemExit(1)
 EOF
 
