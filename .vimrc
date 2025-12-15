@@ -2,6 +2,9 @@ if has("syntax")
 	syntax on
 endif
 
+"-----------------------------------------------------------------------"
+" 기본 설정
+"-----------------------------------------------------------------------"
 set number    " line 표시
 set ai    " auto indent
 set si " smart indent
@@ -22,6 +25,9 @@ set mouse=a
 set ttymouse=sgr
 set encoding=utf-8
 
+"-----------------------------------------------------------------------"
+" Vundle 설정
+"-----------------------------------------------------------------------"
 if empty(glob('~/.vim/bundle/Vundle.vim'))
   silent !git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
   autocmd VimEnter * ++once PluginInstall
@@ -55,14 +61,14 @@ Plugin 'tommcdo/vim-lion'				" 라인 정렬
 Plugin 'tpope/vim-fugitive'				" Vim에서 git 명령어 사용
 Plugin 'AutoComplPop'					" 자동 완성(Ctrl + P)를 누르지 않음
 Plugin 'sheerun/vim-polyglot'			" 여러 언어 문법 강조
-Plugin 'github/copilot.vim'
+Plugin 'github/copilot.vim'             " GitHub Copilot
 
 call vundle#end()
 
 
-"
+"-----------------------------------------------------------------------"
 " ctrlp.vim 설정
-"
+"-----------------------------------------------------------------------"
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\.git$\|public$\|log$\|tmp$\|vendor$',
   \ 'file': '\v\.(exe|so|dll)$'
