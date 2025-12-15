@@ -5,34 +5,35 @@ PKGS=(
   cmake
   build-essential
   python3-dev
-  ninja-build
+#  ninja-build
 
   git
-  ssh
+  openssh-server
   iptables-persistent
   rsyslog
   htop
   python3-venv
+  curl
 #  mdadm
 
   # For tcmalloc
-  libgoogle-perftools-dev
+#   libgoogle-perftools-dev
 
   libgtk-3-dev
 
   # For vim
   vim-gtk3
-  ncurses-dev
-  libacl1-dev
-  gawk
+#  ncurses-dev
+#  libacl1-dev
+#  gawk
 
   # For opencl
-  #ocl-icd-opencl-dev
-  #opencl-headers
-  clinfo
+#  ocl-icd-opencl-dev
+#  opencl-headers
+#  clinfo
 
   # For acl
-  # scons
+#   scons
 )
 
 echo "[+] Updating apt package index..."
