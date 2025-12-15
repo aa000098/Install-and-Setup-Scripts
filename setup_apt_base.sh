@@ -27,9 +27,12 @@ PKGS=(
   gawk
 
   # For opencl
-  ocl-icd-opencl-dev
+  #ocl-icd-opencl-dev
   #opencl-headers
   clinfo
+
+  # For acl
+  # scons
 )
 
 echo "[+] Updating apt package index..."
