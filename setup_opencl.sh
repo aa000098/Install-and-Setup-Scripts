@@ -9,7 +9,7 @@ echo "[1/4] OpenCL 및 빌드 도구 패키지 설치 (sudo 필요)"
 
 sudo apt-get update
 sudo apt-get install -y \
-    git cmake ninja-build build-essential \
+    ocl-icd-libopencl1 opencl-headers \
     ocl-icd-opencl-dev clinfo
 echo "  - Packages needed: git cmake ninja-build build-essential ocl-icd-opencl-dev clinfo"
 
