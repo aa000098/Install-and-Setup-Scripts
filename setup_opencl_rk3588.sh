@@ -19,7 +19,7 @@
 #   6) sudo 실행한 일반 유저를 video/render 그룹에 추가 (GPU 접근용)
 #   7) 마지막에 rsetup 로 해야 할 수동 작업 안내 + reboot 안내
 
-set -euo pipefail
+#set -euo pipefail
 
 echo "=== ROCK 5B/5B+ RK3588 Mali(OpenCL) 전환 스크립트 시작 ==="
 
@@ -272,7 +272,7 @@ echo "- /etc/environment 에 LIBGL_KOPPER_DISABLE=true 추가"
 echo
 echo "=== 다음은 수동으로 해줘야 하는 단계입니다 ==="
 echo "1) 'sudo rsetup' 실행"
-echo "   - 메뉴: Overlays → 'Enable Arm Mali GPU driver' 체크 → 저장 후 종료"
+echo "   - 메뉴: Overlays → Manage overlayes → 'Enable Arm Mali GPU driver' 체크 → 저장 후 종료"
 echo "2) 필요하다면 rsetup → System Maintenance → System Update 로 시스템 업그레이드"
 echo "3) 그 다음 재부팅:"
 echo "      sudo reboot"
