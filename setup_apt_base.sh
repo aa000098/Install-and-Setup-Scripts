@@ -6,6 +6,7 @@ PKGS=(
   build-essential
   python3-dev
 #  ninja-build
+  universal-ctags
 
   git
   openssh-server
