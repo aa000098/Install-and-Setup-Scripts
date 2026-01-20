@@ -145,8 +145,11 @@ export CPATH="$HOME/local/opencv/include/opencv4/:$CPATH"
 export PKG_CONFIG_PATH="$HOME/local/opencv/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 # Metep Env settings
-export METEP_NUM_THREADS=4
-export METEP_CPU_AFFINITY="3 6"
+#export METEP_NUM_THREADS=4
+#export METEP_CPU_AFFINITY="3 6"
+
+# WSL
+export Desktop="/mnt/c/Users/HyunHHSon/OneDrive - OPENEDGES Technology, Inc/바탕 화면/"
 
 # cuda
 # export PATH="/usr/local/cuda/bin:$PATH"
@@ -214,4 +217,3 @@ qnn() {
 
 #RKNN
 export GCC_COMPILER="/usr/bin/aarch64-linux-gnu"
-

@@ -9,8 +9,8 @@ PKGS=(
   universal-ctags
 
   git
-  openssh-server
-  iptables-persistent
+#  openssh-server
+#  iptables-persistent
   rsyslog
   htop
   python3-venv
