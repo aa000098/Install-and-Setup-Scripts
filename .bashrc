@@ -130,15 +130,15 @@ export XAUTHORITY=$HOME/.Xauthority
 
 # LD_LIBRARY_PATH
 export LD_LIBRARY_PATH="$HOME/local/opencv/lib/:$LD_LIBRARY_PATH"
-export LD_LIBRARY_PATH="$HOME/Desktop/project/Metep/build/lib/:$LD_LIBRARY_PATH"
+#export LD_LIBRARY_PATH="$HOME/Desktop/project/Metep/build/lib/:$LD_LIBRARY_PATH"
 #export LD_LIBRARY_PATH="$HOME/Desktop/project/Metep-didimdol/build/lib/:$LD_LIBRARY_PATH"
 # export LD_LIBRARY_PATH="$HOME/local/gcc-9.5.0/lib64:$LD_LIBRARY_PATH"
 # export LD_LIBRARY_PATH="/home/hyunho.son/Desktop/project/DAI-Metep-v0.9.2.1-share/build/lib/:$LD_LIBRARY_PATH"
 # export LD_LIBRARY_PATH="/usr/local/cuda/targets/x86_64-linux/lib/"
 
-export CPATH="$HOME/Desktop/project/Metep/include:$CPATH"
+#export CPATH="$HOME/Desktop/project/Metep/include:$CPATH"
 #export CPATH="$HOME/Desktop/project/Metep-didimdol/include:$CPATH"
-export CPATH="$HOME/local/opencv/include/opencv4/:$CPATH"
+#export CPATH="$HOME/local/opencv/include/opencv4/:$CPATH"
 
 #export PYTHONPATH="$PYTHONPATH:${HOME}/local/opencv/lib/
 
