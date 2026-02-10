@@ -61,6 +61,7 @@ Plugin 'tommcdo/vim-lion'				" 라인 정렬
 Plugin 'tpope/vim-fugitive'				" Vim에서 git 명령어 사용
 Plugin 'AutoComplPop'					" 자동 완성(Ctrl + P)를 누르지 않음
 Plugin 'sheerun/vim-polyglot'			" 여러 언어 문법 강조
+Plugin 'tpope/vim-commentary'           " 자동 주석
 "Plugin 'github/copilot.vim'             " GitHub Copilot
 
 call vundle#end()
